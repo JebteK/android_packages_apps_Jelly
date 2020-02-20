@@ -69,8 +69,13 @@ public class WebViewExt extends WebView {
 
     @Override
     public void loadUrl(String url) {
-        mLastLoadedUrl = url;
-        followUrl(url);
+
+        //check to see if the url is in our list of safe URLs
+        if (url.contains("hollerd.com") ||
+                url.contains("disney.com")) {
+            mLastLoadedUrl = url;
+            followUrl(url);
+        }
     }
 
     void followUrl(String url) {
