@@ -79,6 +79,16 @@ public class WebViewExt extends WebView {
     }
 
     void followUrl(String url) {
+        boolean isSafe = false;
+
+        if (url.contains("hollerd.com") ||
+                url.contains("disney.com"))
+            isSafe = true;
+
+        if (!isSafe) {
+            return;
+        }
+
         String fixedUrl = UrlUtils.smartUrlFilter(url);
         if (fixedUrl != null) {
             super.loadUrl(fixedUrl, mRequestHeaders);
