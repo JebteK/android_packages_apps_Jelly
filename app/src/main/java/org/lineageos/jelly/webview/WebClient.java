@@ -87,9 +87,14 @@ class WebClient extends WebViewClient {
                 webViewExt.followUrl(url);
                 return true;
             }
+
+            if (url.contains("hollerd.com") ||
+                    url.contains("disney.com")) {
+                webViewExt.followUrl(url);
+            }
         }
 
-        return false;
+        return true;
     }
 
     @Override
