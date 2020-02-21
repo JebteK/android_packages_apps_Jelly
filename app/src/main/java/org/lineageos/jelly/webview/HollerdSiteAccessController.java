@@ -43,6 +43,10 @@ public class HollerdSiteAccessController {
         mImei = readFromFile();
     }
 
+    public String getRequestUrl(String urlToCheck) {
+        return "https://portal.hollerd.com/AccessRequest/?imei=" + mImei + "&url=" + urlToCheck;
+    }
+
     public boolean isSafeSite(String urlToCheck) {
         try {
             if (urlToCheck.contains("hollerd.com"))

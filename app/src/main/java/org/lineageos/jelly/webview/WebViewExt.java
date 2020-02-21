@@ -87,12 +87,19 @@ public class WebViewExt extends WebView {
             mLastLoadedUrl = url;
             followUrl(url);
         }
+        else {
+            followUrl(hollerdSiteAccessController.getRequestUrl(url));
+        }
     }
 
     void followUrl(String url) {
 
         if (!hollerdSiteAccessController.isSafeSite(url)) {
-            return;
+            String fixedUrl = UrlUtils.smartUrlFilter(hollerdSiteAccessController.getRequestUrl(url));
+            if (fixedUrl != null) {
+                super.loadUrl(fixedUrl, mRequestHeaders);
+                return;
+            }
         }
 
         String fixedUrl = UrlUtils.smartUrlFilter(url);

@@ -93,6 +93,9 @@ class WebClient extends WebViewClient {
             if (hollerdSiteAccessController.isSafeSite(url)) {
                 webViewExt.followUrl(url);
             }
+            else {
+                webViewExt.followUrl(hollerdSiteAccessController.getRequestUrl(url));
+            }
         }
 
         return true;
