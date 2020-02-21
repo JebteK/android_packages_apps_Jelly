@@ -52,10 +52,12 @@ import java.util.regex.Matcher;
 
 class WebClient extends WebViewClient {
     private UrlBarController mUrlBarController;
+    private HollerdSiteAccessController hollerdSiteAccessController;
 
-    WebClient(UrlBarController urlBarController) {
+    WebClient(UrlBarController urlBarController, Context context) {
         super();
         mUrlBarController = urlBarController;
+        hollerdSiteAccessController = new HollerdSiteAccessController(context);
     }
 
     @Override
@@ -88,8 +90,7 @@ class WebClient extends WebViewClient {
                 return true;
             }
 
-            if (url.contains("hollerd.com") ||
-                    url.contains("disney.com")) {
+            if (hollerdSiteAccessController.isSafeSite(url)) {
                 webViewExt.followUrl(url);
             }
         }

@@ -51,41 +51,47 @@ public class WebViewExt extends WebView {
     private boolean mIncognito;
     private boolean mDesktopMode;
     private String mLastLoadedUrl;
+    private Context mContext;
 
     private final Map<String, String> mRequestHeaders = new ArrayMap<>();
     private static final String HEADER_DNT = "DNT";
 
+    private HollerdSiteAccessController hollerdSiteAccessController;
+
     public WebViewExt(Context context) {
         super(context);
+
+        mContext = context;
+        hollerdSiteAccessController = new HollerdSiteAccessController(context);
     }
 
     public WebViewExt(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mContext = context;
+        hollerdSiteAccessController = new HollerdSiteAccessController(context);
     }
 
     public WebViewExt(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mContext = context;
+        hollerdSiteAccessController = new HollerdSiteAccessController(context);
     }
 
     @Override
     public void loadUrl(String url) {
 
         //check to see if the url is in our list of safe URLs
-        if (url.contains("hollerd.com") ||
-                url.contains("disney.com")) {
+        if (hollerdSiteAccessController.isSafeSite(url)) {
             mLastLoadedUrl = url;
             followUrl(url);
         }
     }
 
     void followUrl(String url) {
-        boolean isSafe = false;
 
-        if (url.contains("hollerd.com") ||
-                url.contains("disney.com"))
-            isSafe = true;
-
-        if (!isSafe) {
+        if (!hollerdSiteAccessController.isSafeSite(url)) {
             return;
         }
 
@@ -170,7 +176,7 @@ public class WebViewExt extends WebView {
         ChromeClient chromeClient = new ChromeClient(activity, incognito,
                 urlBarController, progressBar);
         setWebChromeClient(chromeClient);
-        setWebViewClient(new WebClient(urlBarController));
+        setWebViewClient(new WebClient(urlBarController, mContext));
         setup();
     }
 
