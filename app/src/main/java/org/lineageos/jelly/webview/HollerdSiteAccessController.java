@@ -40,7 +40,7 @@ public class HollerdSiteAccessController {
 
     public void initialize() {
         //load the saved imei
-        mImei = readFromFile();
+        mImei = Secure.getString(mContext.getContentResolver(), Secure.ANDROID_ID);//readFromFile();
     }
 
     public String getRequestUrl(String urlToCheck) {
