@@ -36,6 +36,12 @@ public class HollerdSiteAccessController {
 
         //set the context
         mContext = context;
+
+        //TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
+
+        //mImei = telephonyManager.getImei(HOLLERD_SLOT_INDEX);
+
+        initialize();
     }
 
     public void initialize() {
