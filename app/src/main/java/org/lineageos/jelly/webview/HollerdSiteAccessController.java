@@ -23,13 +23,8 @@ import java.net.URL;
  */
 public class HollerdSiteAccessController {
 
-    private static String IMEI_FILE = "hollerd_imei.txt";
-    private static int HOLLERD_SLOT_INDEX = 0;
-
     private Context mContext;
 
-    private String mWhitelistNumbers;
-    private String mImei;
     private String mAndroidId;
 
     public HollerdSiteAccessController(Context context) {
@@ -37,20 +32,16 @@ public class HollerdSiteAccessController {
         //set the context
         mContext = context;
 
-        //TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
-
-        //mImei = telephonyManager.getImei(HOLLERD_SLOT_INDEX);
-
         initialize();
     }
 
     public void initialize() {
-        //load the saved imei
-        mImei = Secure.getString(mContext.getContentResolver(), Secure.ANDROID_ID);//readFromFile();
+        //load the androidId
+        mAndroidId = Secure.getString(mContext.getContentResolver(), Secure.ANDROID_ID);
     }
 
     public String getRequestUrl(String urlToCheck) {
-        return "https://portal.hollerd.com/AccessRequest/?imei=" + mImei + "&url=" + urlToCheck;
+        return "https://portal.hollerd.com/AccessRequest/" + mAndroidId + "?url=" + urlToCheck;
     }
 
     public boolean isSafeSite(String urlToCheck) {
@@ -58,7 +49,7 @@ public class HollerdSiteAccessController {
             if (urlToCheck.contains("hollerd.com"))
                 return true;
 
-            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/?imei=" + mImei + "&url=" + urlToCheck);
+            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/" + mAndroidId + "?url=" + urlToCheck);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
@@ -105,39 +96,4 @@ public class HollerdSiteAccessController {
         return false;
     }
 
-    private String readFromFile() {
-
-        String ret = "";
-
-        try {
-            //check if the file exists
-            File file = new File(IMEI_FILE);
-
-            if (!file.exists())
-                return ret;
-
-            InputStream inputStream = mContext.openFileInput(IMEI_FILE);
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            //Log.e("readFromFile", e, "File not found: " + e.toString(), this);
-        } catch (IOException e) {
-            //Log.e("readFromFile", e, "Can not read file: " + e.toString(), this);
-        }
-
-        return ret;
-    }
 }
