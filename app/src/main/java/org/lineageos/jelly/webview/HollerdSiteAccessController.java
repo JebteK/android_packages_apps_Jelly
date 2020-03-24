@@ -41,7 +41,7 @@ public class HollerdSiteAccessController {
     }
 
     public String getRequestUrl(String urlToCheck) {
-        return "https://portal.hollerd.com/AccessRequest/" + mAndroidId + "?url=" + urlToCheck;
+        return "https://portal.hollerd.com/AccessRequest/?id=" + mAndroidId + "&url=" + urlToCheck;
     }
 
     public boolean isSafeSite(String urlToCheck) {
@@ -49,7 +49,7 @@ public class HollerdSiteAccessController {
             if (urlToCheck.contains("hollerd.com"))
                 return true;
 
-            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/" + mAndroidId + "?url=" + urlToCheck);
+            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/?id=" + mAndroidId + "&url=" + urlToCheck);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
