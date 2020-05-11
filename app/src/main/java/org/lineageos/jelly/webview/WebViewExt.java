@@ -62,21 +62,21 @@ public class WebViewExt extends WebView {
         super(context);
 
         mContext = context;
-        hollerdSiteAccessController = new HollerdSiteAccessController(context);
+        hollerdSiteAccessController = HollerdSiteAccessController.getInstance(context);
     }
 
     public WebViewExt(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mContext = context;
-        hollerdSiteAccessController = new HollerdSiteAccessController(context);
+        hollerdSiteAccessController = HollerdSiteAccessController.getInstance(context);
     }
 
     public WebViewExt(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         mContext = context;
-        hollerdSiteAccessController = new HollerdSiteAccessController(context);
+        hollerdSiteAccessController = HollerdSiteAccessController.getInstance(context);
     }
 
     @Override
