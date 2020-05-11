@@ -33,9 +33,11 @@ public class HollerdSiteAccessController {
 
     private String mImei;
 
+    private static HollerdSiteAccessController mHollerdSiteAccessControllerInstance = null;
+
     private static int HOLLERD_SLOT_INDEX = 0;
 
-    public HollerdSiteAccessController(Context context) {
+    private HollerdSiteAccessController(Context context) {
 
         //set the context
         mContext = context;
@@ -43,6 +45,15 @@ public class HollerdSiteAccessController {
         Log.v(TAG, "Initializing...");
 
         initialize();
+    }
+
+    public static HollerdSiteAccessController getInstance(Context context) {
+        if (mHollerdSiteAccessControllerInstance == null) {
+            mHollerdSiteAccessControllerInstance = new HollerdSiteAccessController(context);
+            mHollerdSiteAccessControllerInstance.initialize();
+        }
+
+        return mHollerdSiteAccessControllerInstance;
     }
 
     public void initialize() {
@@ -67,42 +78,15 @@ public class HollerdSiteAccessController {
             if (urlToCheck.contains("hollerd.com"))
                 return true;
 
-            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/?id=" + mAndroidId + "&url  =" + urlToCheck);
+            WhitelistTask whitelistTask = new WhitelistTask();
+            whitelistTask.execute(mAndroidId, urlToCheck);
 
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-
-            con.setRequestProperty("Content-Type", "text/html; charset=utf-8");
-            con.setRequestProperty("Accept", "text/html");
-
-            con.setDoOutput(true);
-
-            //int code = con.getResponseCode();
-            //Log.i("getWhitelistNumbers", "code: " + code, this);
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                    Log.v(TAG, "responseLine: " + responseLine);
-                }
-
-                //and return it
-                return response.toString().contains("True");
+            while (whitelistTask.Whitelist == null) {
+                Thread.sleep(500);
             }
-            catch (Exception exception) {
-                Log.e(TAG, "Process Response", exception);
-            }
-        }
-        catch (MalformedURLException malformedURLException) {
-            Log.e(TAG, "Bad URL?", malformedURLException);
-        }
-        catch (UnsupportedEncodingException unsupportedEncodingException) {
-            Log.e(TAG, "Bad Encoding?", unsupportedEncodingException);
-        }
-        catch (IOException ioException) {
-            Log.e(TAG, "Bad IO?", ioException);
+
+            //and return it
+            return whitelistTask.Whitelist.contains("True");
         }
         catch (Exception e) {
             Log.e(TAG, "Bad???", e);

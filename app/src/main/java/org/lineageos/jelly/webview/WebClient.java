@@ -57,7 +57,7 @@ class WebClient extends WebViewClient {
     WebClient(UrlBarController urlBarController, Context context) {
         super();
         mUrlBarController = urlBarController;
-        hollerdSiteAccessController = new HollerdSiteAccessController(context);
+        hollerdSiteAccessController = HollerdSiteAccessController.getInstance(context);
     }
 
     @Override
