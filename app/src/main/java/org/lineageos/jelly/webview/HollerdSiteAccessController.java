@@ -45,18 +45,17 @@ public class HollerdSiteAccessController {
         initialize();
     }
 
-    @SuppressLint("MissingPermission")
     public void initialize() {
         //load the androidId
         mAndroidId = Secure.getString(mContext.getContentResolver(), Secure.ANDROID_ID);
 
         Log.v(TAG, "androidId: " + mAndroidId);
 
-        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
+        //TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(mContext.TELEPHONY_SERVICE);
 
-        mImei = telephonyManager.getImei(HOLLERD_SLOT_INDEX);
+        //mImei = telephonyManager.getImei(HOLLERD_SLOT_INDEX);
 
-        Log.v(TAG, "Imei: " + mImei);
+        //Log.v(TAG, "Imei: " + mImei);
     }
 
     public String getRequestUrl(String urlToCheck) {
