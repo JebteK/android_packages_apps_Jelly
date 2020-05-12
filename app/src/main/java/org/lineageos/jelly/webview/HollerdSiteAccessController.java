@@ -85,6 +85,8 @@ public class HollerdSiteAccessController {
                 Thread.sleep(500);
             }
 
+            Log.v(TAG, "Checked URL: " + urlToCheck + ", androidId: " + mAndroidId + ", response: " + whitelistTask.Whitelist);
+
             //and return it
             return whitelistTask.Whitelist.contains("True");
         }
@@ -94,6 +96,8 @@ public class HollerdSiteAccessController {
         finally {
             //Log.endSession();
         }
+
+        Log.v(TAG, "Something bad happened... url: " + urlToCheck);
 
         return false;
     }
