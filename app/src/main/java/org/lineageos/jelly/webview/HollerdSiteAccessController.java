@@ -81,8 +81,15 @@ public class HollerdSiteAccessController {
             WhitelistTask whitelistTask = new WhitelistTask();
             whitelistTask.execute(mAndroidId, urlToCheck);
 
-            while (whitelistTask.Whitelist == null) {
+            int i = 0;
+
+            while (whitelistTask.Whitelist == null && i++ < 6) {
                 Thread.sleep(500);
+            }
+
+            if (whitelistTask.Whitelist == null) {
+                Log.v(TAG, "Timed Out.");
+                return false;
             }
 
             Log.v(TAG, "Checked URL: " + urlToCheck + ", androidId: " + mAndroidId + ", response: " + whitelistTask.Whitelist);

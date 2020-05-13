@@ -21,13 +21,13 @@ import android.util.Log;
 
 public class WhitelistTask extends AsyncTask<String, Void, String> {
     private Exception exception;
-    private static String TAG = "[WhitelistTask]";
+    private static String TAG = "[WhitelistTask Jelly]";
 
     public String Whitelist = null;
 
     protected String doInBackground(String... strings) {
         try {
-            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/?id=" + strings[0] + "&url  =" + strings[1]);
+            URL url = new URL("https://api.hollerd.com/Hos/CheckSiteAccess/?id=" + strings[0] + "&url=" + strings[1]);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
@@ -35,7 +35,7 @@ public class WhitelistTask extends AsyncTask<String, Void, String> {
             con.setRequestProperty("Content-Type", "text/html; charset=utf-8");
             con.setRequestProperty("Accept", "text/html");
 
-            con.setDoOutput(true);
+            //con.setDoOutput(true);
 
             int code = con.getResponseCode();
             Log.v(TAG, "code: " + code);
@@ -49,22 +49,25 @@ public class WhitelistTask extends AsyncTask<String, Void, String> {
 
                 Log.v(TAG, "response: " + response.toString());
 
+                Whitelist = response.toString();
+
                 //and return it
                 return response.toString();
             }
             catch (Exception exception) {
-                Log.e(TAG, "getWhitelistNumbers: " + exception.getMessage(), exception);
-                return "False";
+                Log.e(TAG, "getWhitelistUrl: " + exception.getMessage(), exception);
+                return "Error";
             }
         } catch (Exception e) {
             this.exception = e;
-            Log.e(TAG, "getWhitelistNumbers: " + exception.getMessage(), exception);
-            return "False";
+            Log.e(TAG, "getWhitelistUrl: " + exception.getMessage(), exception);
+            return "Error";
         }
     }
 
     protected void onPostExecute(String whitelist) {
         // TODO: check this.exception
+        Log.v(TAG, "Returning whitelist status: " + whitelist);
         Whitelist = whitelist;
     }
 }
